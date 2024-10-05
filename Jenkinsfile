@@ -80,6 +80,29 @@ pipeline {
                             sh "mvn deploy"
                         }
                     }
+        }
+        stage('Build & Tag Docker Image') {
+                    steps {
+                         script {
+                           withDockerRegistry(credentialsId: 'docker-cred') {
+                                    sh " docker build -t samixouerfelli/devopsproject:latest ."
+                            }
+                       }
+                    }
                 }
+        stage('Push Docker Image') {
+                    steps {
+                       script {
+                           withDockerRegistry(credentialsId: 'docker-cred') {
+                                    sh " docker push samixouerfelli/devopsproject:latest"
+                            }
+                       }
+                    }
+        }
+
+
+
+
+
     }
 }
