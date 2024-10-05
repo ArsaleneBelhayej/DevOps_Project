@@ -12,23 +12,19 @@ spec:
       labels:
         app: mysql
     spec:
-      initContainers:
-        - name: init-mysql
-          image: mysql:8.0
-          env:
-            - name: MYSQL_ROOT_PASSWORD
-              value: "root"
-          command:
-            [
-              "sh", "-c",
-              "until mysql -u root -p$MYSQL_ROOT_PASSWORD -h localhost -e 'GRANT ALL PRIVILEGES ON devopsprojectDB.* TO \"root\"@\"%\" IDENTIFIED BY \"root\"; FLUSH PRIVILEGES;'; do echo 'Waiting for MySQL to be ready...'; sleep 10; done"
-            ]
       containers:
         - name: mysql
-          image: mysql:8.0
+          image: mariadb:10.4.32
           env:
             - name: MYSQL_ROOT_PASSWORD
-              value: "root"
+              value: ricky
+            - name: MYSQL_DATABASE
+              value: devopsdb
+            - name: MYSQL_USER
+              value: ricky
+            - name: MYSQL_PASSWORD
+              value: ricky
+
           ports:
             - containerPort: 3306
           volumeMounts:
@@ -45,12 +41,12 @@ kind: Service
 metadata:
   name: mysql-service
 spec:
+  type: NodePort
+  ports:
+    - port: 3306
+      targetPort: 3306
   selector:
     app: mysql
-  ports:
-    - protocol: "TCP"
-      port: 3306
-  clusterIP: None
 
 ---
 apiVersion: v1
@@ -84,6 +80,17 @@ spec:
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
+          env:
+          - name: DB_SERVER
+            value: mysql-service
+          - name: DB_PORT
+            value: "3306"
+          - name: DB_NAME
+            value: devopsdb
+          - name: DB_USERNAME
+            value: ricky
+          - name: DB_PASSWORD
+            value: ricky
 ---
 apiVersion: v1
 kind: Service
