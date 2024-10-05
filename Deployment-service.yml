@@ -18,10 +18,21 @@ spec:
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
-
-
+        - name: mysql
+          image: mysql:8.0
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              value: "root"
+          ports:
+            - containerPort: 3306
+          volumeMounts:
+            - name: mysql-persistent-storage
+              mountPath: /var/lib/mysql
+      volumes:
+        - name: mysql-persistent-storage
+          persistentVolumeClaim:
+            claimName: mysql-pv-claim
 ---
-
 apiVersion: v1
 kind: Service
 metadata:
@@ -34,3 +45,29 @@ spec:
       port: 80
       targetPort: 8080
   type: LoadBalancer
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-service
+spec:
+  selector:
+    app: devopsproject
+  ports:
+    - protocol: "TCP"
+      port: 3306
+  clusterIP: None  # This ensures that the service is only accessible within the cluster
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql-pv-claim
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
