@@ -8,6 +8,7 @@ pipeline {
 
     environment {
         SCANNER_HOME = tool 'sonar-scanner'
+        SPRING_PROFILES_ACTIVE = 'local'
     }
 
     stages {
@@ -23,12 +24,6 @@ pipeline {
             }
         }
 
-        stage('Compile') {
-            steps {
-                sh "mvn compile"
-            }
-        }
-
         stage('Setup MySQL') {
             steps {
                 script {
@@ -37,9 +32,15 @@ pipeline {
             }
         }
 
+        stage('Compile') {
+            steps {
+                sh "mvn compile"
+            }
+        }
+
         stage('Test') {
             steps {
-                sh "mvn test"
+                sh "mvn test -Dspring.profiles.active=${SPRING_PROFILES_ACTIVE}"
             }
         }
 
@@ -102,8 +103,10 @@ pipeline {
 
         stage('Deploy To Kubernetes') {
             steps {
+                // Switch profile to `k8s` when deploying to Kubernetes
                 withKubeConfig(caCertificate: '', clusterName: 'devops-k8s-cluster', contextName: 'devops-k8s-cluster', credentialsId: 'k8-cred', namespace: 'webapps', serverUrl: 'https://k8s-cluster-aof2s6e7.hcp.westeurope.azmk8s.io:443') {
                     sh "kubectl apply -f Deployment-service.yml"
+                    sh "kubectl set env deployment/devopsproject-deployment SPRING_PROFILES_ACTIVE=k8s"
                 }
             }
         }

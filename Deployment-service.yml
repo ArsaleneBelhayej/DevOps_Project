@@ -58,7 +58,7 @@ spec:
   ports:
     - protocol: "TCP"
       port: 3306
-  clusterIP: None  # This ensures that the service is only accessible within the cluster
+  clusterIP: None
 
 ---
 apiVersion: v1
