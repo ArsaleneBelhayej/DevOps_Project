@@ -48,8 +48,8 @@ pipeline {
                         withSonarQubeEnv('sonar') {
                             sh '''
                                 $SCANNER_HOME/bin/sonar-scanner \
-                                -Dsonar.projectName=SkiProject \
-                                -Dsonar.projectKey=SkiProject \
+                                -Dsonar.projectName=FoyerProject \
+                                -Dsonar.projectKey=FoyerProject \
                                 -Dsonar.java.binaries=.
                             '''
                         }
