@@ -105,7 +105,7 @@ pipeline {
                                  sh "kubectl apply -f Deployment-service.yml"
                              }
                          }
-                     }
+
 
        stage('Verify the Deployment') {
                          steps {
