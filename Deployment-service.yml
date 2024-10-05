@@ -18,12 +18,6 @@ spec:
           env:
             - name: MYSQL_ROOT_PASSWORD
               value: "root"
-            - name: MYSQL_DATABASE
-              value: "devopsprojectDB"
-            - name: MYSQL_USER
-              value: "ricky"
-            - name: MYSQL_PASSWORD
-              value: "190199"
           ports:
             - containerPort: 3306
           volumeMounts:
