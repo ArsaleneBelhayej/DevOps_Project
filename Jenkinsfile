@@ -105,7 +105,6 @@ pipeline {
             steps {
                 withKubeConfig(caCertificate: '', clusterName: 'devops-k8s-cluster', contextName: 'devops-k8s-cluster', credentialsId: 'k8-cred', namespace: 'webapps', serverUrl: 'https://k8s-cluster-aof2s6e7.hcp.westeurope.azmk8s.io:443') {
                     sh "kubectl apply -f Deployment-service.yml"
-                    sh "kubectl set env deployment/devopsproject-deployment SPRING_PROFILES_ACTIVE=k8s"
 
                 }
             }
