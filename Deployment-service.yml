@@ -64,7 +64,7 @@ spec:
             - containerPort: 8080
           env:
             - name: SPRING_DATASOURCE_URL
-              value: jdbc:mysql://db-service:3306/foyerdb?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true&characterEncoding=utf-8
+              value: jdbc:mysql://db-service:3306/foyerdb&createDatabaseIfNotExist=true
             - name: SPRING_DATASOURCE_USERNAME
               value: foyer
             - name: SPRING_DATASOURCE_PASSWORD
