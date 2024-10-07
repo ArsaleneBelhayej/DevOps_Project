@@ -2,61 +2,45 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: mysql-deployment
+  name: db
 spec:
+  replicas: 1
   selector:
     matchLabels:
-      app: mysql
-  replicas: 1
+      app: db
   template:
     metadata:
       labels:
-        app: mysql
+        app: db
     spec:
       containers:
-        - name: mysql
-          image: mysql:8.0
-          env:
-            - name: MYSQL_ROOT_PASSWORD
-              value: ricky
-            - name: MYSQL_DATABASE
-              value: devopsdb
-            - name: MYSQL_USER
-              value: ricky
-            - name: MYSQL_PASSWORD
-              value: ricky
+        - name: db
+          image: mariadb:10.4.32
           ports:
             - containerPort: 3306
-          volumeMounts:
-            - name: mysql-persistent-storage
-              mountPath: /var/lib/mysql
-      volumes:
-        - name: mysql-persistent-storage
-          persistentVolumeClaim:
-            claimName: mysql-pv-claim
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              value: foyer
+            - name: MYSQL_DATABASE
+              value: foyerdb
+            - name: MYSQL_USER
+              value: foyer
+            - name: MYSQL_PASSWORD
+              value: foyer
+
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: mysql-service
+  name: db-service
 spec:
   type: ClusterIP
   ports:
     - port: 3306
       targetPort: 3306
   selector:
-    app: mysql
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: mysql-pv-claim
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 1Gi
+    app: db
+
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -66,7 +50,7 @@ spec:
   selector:
     matchLabels:
       app: devopsproject
-  replicas: 2
+  replicas: 1
   template:
     metadata:
       labels:
@@ -79,16 +63,14 @@ spec:
           ports:
             - containerPort: 8080
           env:
-            - name: DB_SERVER
-              value: mysql-service
-            - name: DB_PORT
-              value: "3306"
-            - name: DB_NAME
-              value: devopsdb
-            - name: DB_USERNAME
-              value: ricky
-            - name: DB_PASSWORD
-              value: ricky
+            - name: SPRING_DATASOURCE_URL
+              value: jdbc:mysql://db-service:3306/foyerdb?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true&characterEncoding=utf-8
+            - name: SPRING_DATASOURCE_USERNAME
+              value: foyer
+            - name: SPRING_DATASOURCE_PASSWORD
+              value: foyer
+            - name: SPRING_PROFILES_ACTIVE
+              value: k8s
 ---
 apiVersion: v1
 kind: Service
