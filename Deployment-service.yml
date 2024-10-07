@@ -1,3 +1,4 @@
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -24,7 +25,6 @@ spec:
               value: ricky
             - name: MYSQL_PASSWORD
               value: ricky
-
           ports:
             - containerPort: 3306
           volumeMounts:
@@ -35,19 +35,17 @@ spec:
           persistentVolumeClaim:
             claimName: mysql-pv-claim
 ---
-
 apiVersion: v1
 kind: Service
 metadata:
   name: mysql-service
 spec:
-  type: NodePort
+  type: ClusterIP
   ports:
     - port: 3306
       targetPort: 3306
   selector:
     app: mysql
-
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -81,16 +79,16 @@ spec:
           ports:
             - containerPort: 8080
           env:
-          - name: DB_SERVER
-            value: mysql-service
-          - name: DB_PORT
-            value: "3306"
-          - name: DB_NAME
-            value: devopsdb
-          - name: DB_USERNAME
-            value: ricky
-          - name: DB_PASSWORD
-            value: ricky
+            - name: DB_SERVER
+              value: mysql-service
+            - name: DB_PORT
+              value: "3306"
+            - name: DB_NAME
+              value: devopsdb
+            - name: DB_USERNAME
+              value: ricky
+            - name: DB_PASSWORD
+              value: ricky
 ---
 apiVersion: v1
 kind: Service
@@ -101,6 +99,6 @@ spec:
     app: devopsproject
   ports:
     - protocol: "TCP"
-      port: 80
+      port: 8080
       targetPort: 8080
   type: LoadBalancer
