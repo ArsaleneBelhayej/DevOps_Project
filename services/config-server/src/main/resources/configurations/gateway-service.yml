@@ -1,3 +1,5 @@
+server:
+  port: 9999
 spring:
   cloud:
     gateway:
@@ -8,19 +10,19 @@ spring:
         - id: bloc-service
           uri: lb:http://BLOC-SERVICE
           predicates:
-            - Path=/api/v1/bloc/**
+            - Path=/api/v1/blocs/**
         - id: chambre-service
           uri: lb:http://CHAMBRE-SERVICE
           predicates:
-            - Path=/api/v1/chambre/**
+            - Path=/api/v1/chambres/**
         - id: etudiant-service
           uri: lb:http://ETUDIANT-SERVICE
           predicates:
-            - Path=/api/v1/etudiant/**
+            - Path=/api/v1/etudiants/**
         - id: foyer-service
           uri: lb:http://FOYER-SERVICE
           predicates:
-            - Path=/api/v1/foyer/**
+            - Path=/api/v1/foyers/**
         - id: reservation-service
           uri: lb:http://RESERVATION-SERVICE
           predicates:
@@ -28,8 +30,5 @@ spring:
         - id: universite-service
           uri: lb:http://UNIVERSITE-SERVICE
           predicates:
-            - Path=/api/v1/universite/**
+            - Path=/api/v1/universites/**
 
-
-server:
-  port: 8099
