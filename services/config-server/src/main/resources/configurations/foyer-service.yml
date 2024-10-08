@@ -14,3 +14,7 @@ spring:
 
 server:
   port: 8053
+application:
+  config:
+    bloc-url: http://localhost:8099/api/v1/bloc
+    universite-url: http://localhost:8099/api/v1/universite
