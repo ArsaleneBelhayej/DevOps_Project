@@ -1,0 +1,108 @@
+services:
+  bloc:
+    container_name: ms-bloc-db
+    image: postgres
+    environment:
+      POSTGRES_USER: ricky
+      POSTGRES_PASSWORD: 190199
+      POSTGRES_DB: blocdb
+      PGDATA: /var/lib/postgresql/data
+    volumes:
+      - postgres1:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    networks:
+      - microservices-net
+    restart: unless-stopped
+
+  chambre:
+    container_name: ms-chambre-db
+    image: postgres
+    environment:
+      POSTGRES_USER: ricky
+      POSTGRES_PASSWORD: 190199
+      POSTGRES_DB: chambredb
+      PGDATA: /var/lib/postgresql/data
+    volumes:
+      - postgres2:/var/lib/postgresql/data
+    ports:
+      - 5433:5432
+    networks:
+      - microservices-net
+    restart: unless-stopped
+
+  etudiant:
+    container_name: ms-etudiant-db
+    image: postgres
+    environment:
+      POSTGRES_USER: ricky
+      POSTGRES_PASSWORD: 190199
+      POSTGRES_DB: etudiantdb
+      PGDATA: /var/lib/postgresql/data
+    volumes:
+      - postgres3:/var/lib/postgresql/data
+    ports:
+      - 5434:5432
+    networks:
+      - microservices-net
+    restart: unless-stopped
+
+  foyer:
+    container_name: ms-foyer-db
+    image: postgres
+    environment:
+      POSTGRES_USER: ricky
+      POSTGRES_PASSWORD: 190199
+      POSTGRES_DB: foyerdb
+      PGDATA: /var/lib/postgresql/data
+    volumes:
+      - postgres4:/var/lib/postgresql/data
+    ports:
+      - 5435:5432
+    networks:
+      - microservices-net
+    restart: unless-stopped
+
+  reservation:
+    container_name: ms-reservation-db
+    image: postgres
+    environment:
+      POSTGRES_USER: ricky
+      POSTGRES_PASSWORD: 190199
+      POSTGRES_DB: reservationdb
+      PGDATA: /var/lib/postgresql/data
+    volumes:
+      - postgres5:/var/lib/postgresql/data
+    ports:
+      - 5436:5432
+    networks:
+      - microservices-net
+    restart: unless-stopped
+
+  universite:
+    container_name: ms-universite-db
+    image: postgres
+    environment:
+      POSTGRES_USER: ricky
+      POSTGRES_PASSWORD: 190199
+      POSTGRES_DB: universitdb
+      PGDATA: /var/lib/postgresql/data
+    volumes:
+      - postgres6:/var/lib/postgresql/data
+    ports:
+      - 5437:5432
+    networks:
+      - microservices-net
+    restart: unless-stopped
+
+networks:
+  microservices-net:
+    driver: bridge
+
+volumes:
+  postgres1:
+  postgres2:
+  postgres3:
+  postgres4:
+  postgres5:
+  postgres6:
